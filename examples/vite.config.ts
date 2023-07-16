@@ -4,7 +4,7 @@ import { VitePluginTimer } from '../src'
 export default defineConfig({
   plugins: [
     VitePluginTimer({
-      interval: 2000
+      interval: '1s'
     })
   ]
 })

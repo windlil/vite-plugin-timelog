@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { relative } from 'path'
+import { extname } from 'path'
 import { normalizePath } from 'vite'
 
 const result: {
@@ -17,6 +18,10 @@ interface Result {
 
 let basePath: string
 
+function isExist(name: string, value: string) {
+  return result[name].find((n:string) => n == value)
+}
+
 export function mapDir(path: string, bPath?: string): Result {
   if (bPath) basePath = bPath
   const list = fs.readdirSync(path)
@@ -25,10 +30,10 @@ export function mapDir(path: string, bPath?: string): Result {
     const currentPath = path + '/' + name
     const isDir = fs.statSync(currentPath).isDirectory()
     const rp = relative(basePath, currentPath)
-    if (isDir) {
+    if (isDir && !isExist('dirs', rp)) {
       result.dirs.push(normalizePath(rp))
       mapDir(currentPath)
-    } else {
+    } else if (!isDir && !isExist('files', rp)) {
       result.files.push(normalizePath(rp))
     }
   })
@@ -43,4 +48,29 @@ export function compare(before: Result, after: Result) {
   return {
     count: add.size
   }
+}
+
+export function getInfo(node: Result) {
+  const files = node.files
+  console.log(files)
+  const info = {}
+  let filesCount = 0
+  files.forEach(f => {
+    const ext = extname(f)
+    if (!info[ext]) {
+      info[ext] = {
+        count: 0,
+        proportion: 0
+      }
+    }
+    info[ext].count++
+    filesCount++
+  })
+  for (const key in info) {
+    info[key].proportion = (info[key].count / filesCount).toFixed(2)
+  }
+}
+
+export function createMap(structure: any) {
+  
 }
