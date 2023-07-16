@@ -38,24 +38,21 @@ function normalizeOptions(options: Options) {
 const VitePluginTimer = (options: Options):PluginOption => {
   const { interval } = normalizeOptions(options)
   let timer: any
-  let before: any
   let codingTime: number = 0
-  let startTime: Date = new Date()
 
   return {
     name: 'vite-plugin-timer',
     configResolved(config:ResolvedConfig) {
-      before = structuredClone(mapDir(config.root, config.root))
+
       if (config.command === 'serve' && !timer)  {
         timer = setInterval(() => {
           codingTime = codingTime + interval
           const after = mapDir(config.root, config.root)
           const info = getInfo(after)
-          const map = createMap(info)
           const date = getDate()
           const time = `(${date})`
           console.log(`${colors.bold(colors.green(time))}`+ `   ⭐  ${colors.blue(`You've been coding for ${formatTime(codingTime)}` )}`)
-          console.log(`${colors.yellow(`new files: ${''}`)}`)
+          createMap(info)
         }, interval)
       }
     }
