@@ -1,21 +1,25 @@
 {
   "name": "vite-plugin-timer",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "In the vite dev environment, remind users of the current time based on the set interval time and provide the directory structure of the currently running project.",
+  "files": ["dist"],
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "workspaces": [
     "examples",
     "src"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.4.2",
+    "tsup": "^7.1.0",
     "typescript": "^5.1.6",
     "vite": "^4.4.4"
   },

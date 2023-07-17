@@ -84,7 +84,10 @@ export function getInfo(node: Result) {
   for (const key in info) {
     info[key].proportion = (info[key].count / filesCount).toFixed(2)
   }
-  return info
+  return {
+    info,
+    filesCount
+  }
 }
 
 
@@ -99,27 +102,90 @@ interface Structure {
 
 
 export function structureToArray(structure: Structure) {
+  const list = ['.ts', '.js', '.tsx', '.jsx', '.vue', '.css', '.less', '.sass', '.html', '.json']
   const arr: {
     name: string,
     count: number,
     proportion: number
   }[] = []
   for(const key in structure) {
-    arr.push({
-      name: key,
-      count: structure[key].count,
-      proportion: Number(structure[key].proportion)
-    })
+    if (list.includes(key)) {
+      arr.push({
+        name: key,
+        count: structure[key].count,
+        proportion: Number(structure[key].proportion)
+      })
+    } else {
+      const exist = arr.find((item) => item.name = 'other')
+      if (exist) {
+        exist.count += structure[key].count
+        exist.proportion += Number(structure[key].proportion)
+      } else {
+        arr.push({
+          name: 'other',
+          count: structure[key].count,
+          proportion: Number(structure[key].proportion)
+        })
+      }
+    }
   }
   return arr.sort((a: any,b: any) => {
     return b.count - a.count
   })
 }
 
-export function createMap(structure: Structure) {
+
+
+export function createMap(structure: Structure, fileCount: number, styleOption: any) {
   const structureArr = structureToArray(structure)
-  let map = ''
+  let map = `Total number of files: ${colors.underline(fileCount)} \n\n`
   for (const item of structureArr) {
-    console.log(`${colors.magenta(item.name)}`)
+    let str = styleOption.barstyle?styleOption.barstyle:'\u2588'
+    for (let i = 0; i < (item.proportion * 100); i++) {
+      str += styleOption.barstyle?styleOption.barstyle:'\u2588'
+    }
+    let name = item.name + ':'
+
+    for (let i = name.length; i < 8; i++) {
+      name += " "
+    }
+    const spaced = styleOption.spaced? '\n': ''
+
+    let info = `${(item.proportion * 100).toFixed(0)}%`
+    switch(item.name) {
+      case '.ts':
+        map += `${colors.blue(`${name}${str}  ${info}`)}\n` + spaced
+        break;
+      case '.tsx':
+        map += `${colors.blue(`${name}${str}  ${info}`)}\n`+ spaced
+        break;
+      case '.js':
+        map += `${colors.yellow(`${name}${str}  ${info}`)}\n`+ spaced
+        break
+      case '.jsx':
+        map += `${colors.yellow(`${name}${str}  ${info}`)}\n`+ spaced
+        break
+      case '.css':
+        map += `${colors.magenta(`${name}${str}  ${info}`)}\n`+ spaced
+        break
+      case '.less':
+        map += `${colors.magenta(`${name}${str}  ${info}`)}\n`+ spaced
+        break
+      case '.sass':
+        map += `${colors.magenta(`${name}${str}  ${info}`)}\n`+ spaced
+        break
+      case '.vue':
+        map += `${colors.green(`${name}${str}  ${info}`)}\n`+ spaced
+      break
+      case '.json':
+        map += `${colors.white(`${name}${str}  ${info}`)}\n`+ spaced
+      break
+      case '.html':
+        map += `${colors.red(`${name}${str}  ${info}`)}\n`+ spaced
+      break
+      default:
+        map += `${colors.dim(`${name}${str}  ${info}`)}\n`+ spaced
+    }    
   }
+  console.log(map)
 }

@@ -1,11 +1,11 @@
 import type { PluginOption, ResolvedConfig } from 'vite'
 import colors from 'picocolors'
 import { getDate, formatTime } from './utils/timer'
-import { compare, mapDir, getInfo, createMap } from './utils/files'
+import { mapDir, getInfo, createMap } from './utils/files'
 import type { Options } from './types'
 
 function normalizeOptions(options: Options) {
-  let {interval} = options
+  let {interval, spaced, barstyle} = options
   if (typeof interval === 'number') {
     interval = String(interval)
   }
@@ -31,12 +31,18 @@ function normalizeOptions(options: Options) {
       break
   }
   return {
-    interval: timerInterval
+    interval: timerInterval,
+    spaced,
+    barstyle
   }
 }
 
 const VitePluginTimer = (options: Options):PluginOption => {
-  const { interval } = normalizeOptions(options)
+  let { interval, spaced, barstyle } = normalizeOptions(options)
+  const styleOption = {
+    spaced,
+    barstyle
+  }
   let timer: any
   let codingTime: number = 0
 
@@ -48,11 +54,12 @@ const VitePluginTimer = (options: Options):PluginOption => {
         timer = setInterval(() => {
           codingTime = codingTime + interval
           const after = mapDir(config.root, config.root)
-          const info = getInfo(after)
+          const { info, filesCount } = getInfo(after)
           const date = getDate()
           const time = `(${date})`
-          console.log(`${colors.bold(colors.green(time))}`+ `   ⭐  ${colors.blue(`You've been coding for ${formatTime(codingTime)}` )}`)
-          createMap(info)
+          console.log(`${colors.bold(colors.green(time))}`)
+          createMap(info, filesCount, styleOption)
+          console.log(`  ${colors.green(`You've been coding for ${colors.bold(formatTime(codingTime))}.`)}\n`)
         }, interval)
       }
     }
