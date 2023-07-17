@@ -116,16 +116,16 @@ export function structureToArray(structure: Structure) {
         proportion: Number(structure[key].proportion)
       })
     } else {
-      const exist = arr.find((item) => item.name = 'other')
-      if (exist) {
-        exist.count += structure[key].count
-        exist.proportion += Number(structure[key].proportion)
-      } else {
+      const obj = arr.find((item) => item.name === 'others')
+      if (!obj) {
         arr.push({
-          name: 'other',
+          name: 'others',
           count: structure[key].count,
           proportion: Number(structure[key].proportion)
         })
+      } else {
+        obj.count = obj.count + structure[key].count
+        obj.proportion = obj.proportion + Number(structure[key].proportion)
       }
     }
   }
