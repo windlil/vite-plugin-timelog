@@ -28,7 +28,7 @@ import { VitePluginTimeLog } from 'vite-plugin-timelog'
 export default defineConfig({
   plugins: [
     VitePluginTimeLog({
-      interval: 1h,
+      interval: "1h",
     })
   ]
 })
