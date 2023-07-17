@@ -37,7 +37,7 @@ function normalizeOptions(options: Options) {
   }
 }
 
-const VitePluginTimer = (options: Options):PluginOption => {
+const VitePluginTimeLog = (options: Options):PluginOption => {
   let { interval, spaced, barstyle } = normalizeOptions(options)
   const styleOption = {
     spaced,
@@ -67,7 +67,7 @@ const VitePluginTimer = (options: Options):PluginOption => {
 }
 
 export {
-  VitePluginTimer
+  VitePluginTimeLog
 }
 
-export default VitePluginTimer
+export default VitePluginTimeLog

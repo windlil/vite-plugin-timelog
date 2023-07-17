@@ -1,5 +1,5 @@
 {
-  "name": "vite-plugin-timer",
+  "name": "vite-plugin-timelog",
   "version": "1.0.0",
   "description": "In the vite dev environment, remind users of the current time based on the set interval time and provide the directory structure of the currently running project.",
   "files": ["dist"],
@@ -14,7 +14,10 @@
   "scripts": {
     "build": "tsup"
   },
-  "keywords": [],
+  "keywords": [
+    "vite",
+    "vite-plugin"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
