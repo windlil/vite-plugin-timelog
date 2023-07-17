@@ -4,6 +4,8 @@
 
 - console the composition of the current project.
 
+![image](https://github.com/SpacesoulsL/vite-plugin-timelog/blob/main/examples/vite-vue3/images/spaced.png)
+
 ### 📦Install
 
 ```
@@ -67,4 +69,5 @@ export default defineConfig({
   ]
 })
 ```
+![image](https://github.com/SpacesoulsL/vite-plugin-timelog/blob/main/examples/vite-vue3/images/config.png)
 
